@@ -61,4 +61,4 @@ if __name__ == '__main__':
 	for player in players:
 		by_team[player['team']].add(player['Name'])
 	for team, players in by_team.items():
-		print("{}: {} players: {}".format(team, len(players), [p.encode("utf-8") for p in players]))
+		print("{}: {} players: {}\n".format(team, len(players), [p.encode("utf-8") for p in players]))
