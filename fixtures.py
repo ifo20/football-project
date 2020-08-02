@@ -37,7 +37,7 @@ def allocate_fixtures_to_matchdays(fixtures, number_of_matchdays):
 		print("{} vs {}".format(f[0], f[1]))
 
 if __name__ == '__main__':
-	with open('teams.json') as teams_json:
+	with open('premier_league.json') as teams_json:
 		teams = json.load(teams_json)
 		fixtures = generate_all_fixtures_for_season(list(teams.keys()))
 		schedule = allocate_fixtures_to_matchdays(fixtures, (len(teams) - 1)*2)
