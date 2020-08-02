@@ -1,4 +1,5 @@
 from collections import defaultdict
+import json
 import requests
 
 from bs4 import BeautifulSoup
@@ -57,8 +58,11 @@ def load_football_squads():
 
 if __name__ == '__main__':
 	teams, players = load_football_squads()
-	by_team = defaultdict(set)
+	by_team = defaultdict(list)
 	for player in players:
-		by_team[player['team']].add(player['Name'])
+		by_team[player['team']].append(player['Name'])
 	for team, players in by_team.items():
 		print("{}: {} players: {}\n".format(team, len(players), [p.encode("utf-8") for p in players]))
+
+	with open('teams.json', 'w') as my_file:
+		json.dump(by_team, my_file)
