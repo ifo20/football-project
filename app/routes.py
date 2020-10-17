@@ -1,4 +1,4 @@
-from flask import render_template, flash, redirect
+from flask import render_template, flash, redirect, request
 from app import app
 from fixtures import get_fixture_list, get_teams
 from app.forms import LoginForm
@@ -32,7 +32,7 @@ def index():
 
 
 
-@app.route('/teams', methods=['GET', 'POST'])
+@app.route('/teams', methods=['GET'])
 def teams():
     return render_template(
         'teams.html',
@@ -43,14 +43,15 @@ def teams():
 @app.route('/team/<team_slug>', methods=['GET', 'POST'])
 def team(team_slug):
     teams = get_teams()
-    
-
-
+    team = teams[team_slug]
+    if request.method == 'POST':
+        return render_template('game_page.html', team=team)
     return render_template(
         'team.html',
         title='Team', 
-        team=teams[team_slug],
+        team=team,
     )
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

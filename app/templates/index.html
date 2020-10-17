@@ -15,7 +15,11 @@
                 <tbody>
                     {% for team,name in teams %}
                     <tr>
-                        <td> <a href="team/{{team}}">{{name}} </a></td>
+                        <td>                            
+                            <form action="team/{{team}}" method="POST">
+                                <button type="submit" class="btn btn-primary">{{name}}</button>
+                            </form>
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
