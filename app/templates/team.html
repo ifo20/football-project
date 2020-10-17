@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm">
+            <h1>
+                {{team.name}}
+            </h1> 
+            
+            <table class="table table-dark">
+                <tbody>
+                    {% for playername in team.players %}
+                    <tr>
+                        <td> {{playername}} </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+</div>
+
+
+
+
+{% endblock %}

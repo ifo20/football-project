@@ -1,5 +1,6 @@
 import json
 import random
+from pdb import set_trace
 
 def generate_all_fixtures_for_season(teams):
 	random.shuffle(teams)
@@ -35,9 +36,26 @@ def allocate_fixtures_to_matchdays(fixtures, number_of_matchdays):
 	print("Allocated fixtures, opening matchday fixtures below:")
 	for f in matchdays[0]:
 		print("{} vs {}".format(f[0], f[1]))
+	return matchdays
+
+def get_teams():
+	with open('premier_league.json') as teams_json:
+		raw_teams = json.load(teams_json)
+	#set_trace()
+	teams = {
+		team.lower().replace(" ","-"): {
+			"name": team,
+			"players": players,
+		}
+		for team, players in raw_teams.items()
+	}
+	return teams
+	
+
+def get_fixture_list():
+	teams = get_teams()
+	fixtures = generate_all_fixtures_for_season(list(teams.keys()))
+	return allocate_fixtures_to_matchdays(fixtures, (len(teams) - 1)*2)
 
 if __name__ == '__main__':
-	with open('premier_league.json') as teams_json:
-		teams = json.load(teams_json)
-		fixtures = generate_all_fixtures_for_season(list(teams.keys()))
-		schedule = allocate_fixtures_to_matchdays(fixtures, (len(teams) - 1)*2)
+	get_fixture_list()

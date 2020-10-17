@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<table class="table table-dark">
+    <tbody>
+        {% for team,name in teams %}
+        <tr>
+            <td> <a href="team/{{team}}">{{name}} </a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+
+
+
+{% endblock %}

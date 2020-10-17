@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm">
+
+
+            <h1>Hi, {{ user.username }}!</h1>
+            
+            <p>Choose Your Team Below:</p>
+
+            <table class="table table-light">
+                <tbody>
+                    {% for team,name in teams %}
+                    <tr>
+                        <td> <a href="team/{{team}}">{{name}} </a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+        <div class="col-sm">
+            {% for matchday in matchdays %}
+            <h4> Matchday {{loop.index}} </h4>
+            <ul>
+
+                {% for game in matchday %}
+
+                <li>
+                    {{game[0]}} vs {{game[1]}}
+                </li>
+
+                {% endfor %}
+
+            </ul>
+
+            {% endfor %}
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}
