@@ -15,6 +15,13 @@ POST_HIT = "POST_HIT"
 SHOT_OVER = "SHOT_OVER"
 KICK_OFF = "KICK_OFF"
 GOAL_KICK = "GOAL_KICK"
+TACKLE = "TACKLE"
+DRIBBLE = "DRIBBLE"
+BAD_TACKLE = "BAD_TACKLE"
+YELLOW_CARD = "YELLOW_CARD"
+HANDBALL = "HANDBALL"
+FOUL = "FOUL"
+FREEKICK = "FREEKICK"
 
 EVENTS = {}
 
@@ -93,14 +100,15 @@ class NullEvent(Event):
 		if next_event_key == ATTACK_START:
 			return {
 				"team": random.choice([kwargs["home_team"], kwargs["away_team"]]),
+				"other_team": random.choice([kwargs["home_team"], kwargs["away_team"]]),
 			}
 		return {}
 
 @register
 class AttackStartEvent(Event):
 	KEY = ATTACK_START
-	PARAMS = {'team'}
-	PRECEDES = [THROUGH_BALL, LONG_SHOT]
+	PARAMS = {'team','other_team'}
+	PRECEDES = [THROUGH_BALL, LONG_SHOT, DRIBBLE]
 	TEXTS = [
 		"{team} launches an attack...",
 		"{team} are on the attack...",
@@ -116,13 +124,18 @@ class AttackStartEvent(Event):
 				"from_player": self.params["team"].get_random_player(),
 				"to_player": self.params["team"].get_random_player(),
 			}
+		if next_event_key == DRIBBLE:
+			return{
+				"dribbler": self.params["team"].get_random_player(),
+				"tackler": self.params["other_team"].get_random_player(),
+			}
 		return {}
 
 @register
 class ThroughBallEvent(Event):
 	KEY = THROUGH_BALL
 	PARAMS = {'from_player', 'to_player'}
-	PRECEDES = [ONE_ON_ONE]
+	PRECEDES = [ONE_ON_ONE, BAD_TACKLE]
 	TEXTS = [
 		"{from_player} plays a through ball to {to_player}...",
 	]
@@ -130,9 +143,15 @@ class ThroughBallEvent(Event):
 	def get_next_params(self, next_event_key, **kwargs):
 		if next_event_key == ONE_ON_ONE:
 			return {
-				"player": self.params["team"].get_random_player(),
+				"player": self.params["to_player"],
+			}
+		elif next_event_key == BAD_TACKLE:
+			return {
+				"Victim": self.params["to_player"],
+				"Tackler": self.params["other_team"].get_random_player(),
 			}
 		return {}
+
 
 @register
 class LongShotEvent(Event):
@@ -152,7 +171,7 @@ class LongShotEvent(Event):
 class OneOnOneEvent(Event):
 	KEY = ONE_ON_ONE
 	PARAMS = {'player'}
-	PRECEDES = [GOAL_SCORED, GREAT_SAVE, POST_HIT, SHOT_OVER]
+	PRECEDES = [GOAL_SCORED, GREAT_SAVE, POST_HIT, SHOT_OVER,]
 	TEXTS = [
 		"{player} is one-on-one with the keeper!",
 	]
@@ -161,6 +180,66 @@ class OneOnOneEvent(Event):
 		return {
 			"goalkeeper": "the goalkeeper",
 		}
+
+@register
+class BadTackle(Event):
+	KEY = BAD_TACKLE
+	PARAMS = {'Tackler','Victim'}
+	PRECEDES = [FOUL]
+	TEXTS = [
+		"{Tackler} attempts a poor tackle on {Victim}!",
+	]
+
+	def get_next_params(self, next_event_key, **kwargs):
+		return {
+			"player": self.params["Victim"],
+		}
+
+@register
+class Handball(Event):
+	KEY = HANDBALL
+	PARAMS = {'player'}
+	PRECEDES = [YELLOW_CARD]
+	TEXTS = [
+		"It's a handball from {player}!",
+	]
+
+@register
+class Foul(Event):
+	KEY = FOUL
+	PARAMS = {'player'}
+	PRECEDES = [FREEKICK]
+	TEXTS = [
+		"It's a foul from {player}!",
+	]
+
+@register
+class Freekick(Event):
+	KEY = FREEKICK
+	PARAMS = {'player'}
+	PRECEDES = [ATTACK_START, LONG_SHOT, THROUGH_BALL]
+	TEXTS = [
+		"{player} takes the freekick.",
+	]
+	def get_next_params(self, next_event_key, **kwargs):
+		if next_event_key == THROUGH_BALL:
+			return {
+				"from_player": self.params["player"],
+				"to_player": self.params["team"].get_random_player(),
+			}
+
+		return {}
+
+
+@register
+class YellowCard(Event):
+	KEY = YELLOW_CARD
+	PARAMS = {'player'}
+	PRECEDES = [ATTACK_START]
+	TEXTS = [
+			"{player} has recived a yellow from the referee.",
+			"The ref pulls out a yellow for the player",
+		]
 
 @register
 class ShotOverEvent(Event):
@@ -210,6 +289,41 @@ class GreatSaveEvent(Event):
 	TEXTS = [
 		"Great save by {goalkeeper}!",
 	]
+
+@register
+class TackleEvent(Event):
+	KEY = TACKLE
+	PARAMS = {'tackler','dribbler'}
+	PRECEDES = [FOUL, NULL]
+	TEXTS = [
+		"{dribbler} has been tackled by {tackler}."
+	]
+	def get_next_params(self, next_event_key, **kwargs):
+		if next_event_key == FOUL:
+			return {
+				"player": self.params["dribbler"],
+			}
+
+@register
+class DribbleEvent(Event):
+	KEY = DRIBBLE
+	PARAMS = {'dribbler', 'tackler'}
+	PRECEDES = [FOUL, ONE_ON_ONE, TACKLE]
+	TEXTS = [
+		"{dribbler} takes on {tackler}."
+	]
+
+	def get_next_params(self, next_event_key, **kwargs):
+		if next_event_key == ONE_ON_ONE:
+			return {
+				"player": self.params["team"].get_random_player(),
+			}
+		elif next_event_key == FOUL:
+			return {
+				"player": self.params["other_team"].get_random_player(),
+			}
+		return {}
+
 
 @register
 class GoalScoredEvent(Event):

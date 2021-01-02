@@ -55,9 +55,9 @@ class Match:
 			print(scorer)
 
 if __name__== '__main__':
-	number_of_games = 1
+	number_of_games = 5
 	# game_speed: 0 is fastest, 0.5-1.0 is relatively normal, 5 is really slow
-	game_speed = 0.5
+	game_speed = 0.05
 	scores = []
 	total_home = 0
 	total_away = 0
