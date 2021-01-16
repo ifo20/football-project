@@ -4,21 +4,60 @@ import time
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
-from team import get_matchup
+from team import get_teams
+from fixtures import get_fixtures
+from collections import defaultdict
 
-class Match:
-	def __init__(self, home_team, away_team):
-		self.home_team = home_team
-		self.away_team = away_team
-		self.home_score = 0
-		self.away_score = 0
-		self.minute = 0
-		self.events = [] # (event, minute)
+class League:
+	def __init__(self):
+		self.teams = get_teams()
+		self.fixtures = get_fixtures(self.teams)
+		self.matches = []
 		
-
+	
+	
 	@property
-	def score(self):
-		return "{} {} - {} {}".format(self.home_team, self.home_score, self.away_score, self.away_team)
+	def table(self):
+		#Need games played, won, draw lost, goals f, goals a, gd, pts
+		teams = {k:defaultdict(int) for k in self.teams}
+		
+		
+		for match in self.matches:
+			home_team_row = teams[match.home_team.slug] 
+			away_team_row = teams[match.home_team.slug] 
+			home_team_row["games_played"] += 1
+			away_team_row["games_played"] += 1
+			home_team_row["goals_for"] += match.home_score
+			away_team_row["goals_for"] += match.away_score
+			home_team_row["goals_against"] += match.away_score
+			away_team_row["goals_against"] += match.home_score
+			home_team_row["goal_difference"] += match.home_score - match.away_score
+			away_team_row["goal_difference"] += match.home_score - match.away_score
+
+			if match.home_score > match.away_score:
+				home_team_row[won] += 1
+				home_team_row[points] += 3
+				away_team_row[loss] += 1
+
+			elif match.home_score < match.away_score:
+				home_team_row[loss] += 1
+				away_team_row[won] += 1
+				away_team_row[points] += 3
+
+			else:
+				away_team_row[draw] += 1
+				away_team_row[points] += 1
+				home_team_row[draw] += 1
+				home_team_row[points] += 1
+		
+		
+		table = []
+		
+		for team in teams:
+			table.append(team)
+		
+		table.sort()
+		return table
 		
 	def start(self, tick_period=0):
 		logger.info("Kick off! %s vs %s is underway", self.home_team, self.away_team)

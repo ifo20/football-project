@@ -38,24 +38,7 @@ def allocate_fixtures_to_matchdays(fixtures, number_of_matchdays):
 		print("{} vs {}".format(f[0], f[1]))
 	return matchdays
 
-def get_teams():
-	with open('premier_league.json') as teams_json:
-		raw_teams = json.load(teams_json)
-	#set_trace()
-	teams = {
-		team.lower().replace(" ","-"): {
-			"name": team,
-			"players": players,
-		}
-		for team, players in raw_teams.items()
-	}
-	return teams
-	
-
-def get_fixture_list():
-	teams = get_teams()
+def get_fixtures(teams):
 	fixtures = generate_all_fixtures_for_season(list(teams.keys()))
 	return allocate_fixtures_to_matchdays(fixtures, (len(teams) - 1)*2)
 
-if __name__ == '__main__':
-	get_fixture_list()
