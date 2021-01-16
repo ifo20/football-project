@@ -13,18 +13,14 @@ class League:
 		self.teams = get_teams()
 		self.fixtures = get_fixtures(self.teams)
 		self.matches = []
-		
-	
-	
+
 	@property
 	def table(self):
 		#Need games played, won, draw lost, goals f, goals a, gd, pts
 		teams = {k:defaultdict(int) for k in self.teams}
-		
-		
 		for match in self.matches:
-			home_team_row = teams[match.home_team.slug] 
-			away_team_row = teams[match.home_team.slug] 
+			home_team_row = teams[match.home_team.slug]
+			away_team_row = teams[match.home_team.slug]
 			home_team_row["games_played"] += 1
 			away_team_row["games_played"] += 1
 			home_team_row["goals_for"] += match.home_score
@@ -35,37 +31,34 @@ class League:
 			away_team_row["goal_difference"] += match.home_score - match.away_score
 
 			if match.home_score > match.away_score:
-				home_team_row[won] += 1
-				home_team_row[points] += 3
-				away_team_row[loss] += 1
-
+				home_team_row["won"] += 1
+				home_team_row["points"] += 3
+				away_team_row["lost"] += 1
 			elif match.home_score < match.away_score:
-				home_team_row[loss] += 1
-				away_team_row[won] += 1
-				away_team_row[points] += 3
-
+				home_team_row["lost"] += 1
+				away_team_row["won"] += 1
+				away_team_row["points"] += 3
 			else:
-				away_team_row[draw] += 1
-				away_team_row[points] += 1
-				home_team_row[draw] += 1
-				home_team_row[points] += 1
-		
-		
+				away_team_row["draw"] += 1
+				away_team_row["points"] += 1
+				home_team_row["draw"] += 1
+				home_team_row["points"] += 1
+
 		table = []
-		
+
 		for team in teams:
 			table.append(team)
-		
+
 		table.sort()
 		return table
-		
+
 	def start(self, tick_period=0):
 		logger.info("Kick off! %s vs %s is underway", self.home_team, self.away_team)
 		self.events.append((events.KickOffEvent(team=self.home_team), 0))
 		while self.minute < 90:
 			self.tick()
 			time.sleep(tick_period)
-		
+
 		logger.info("The referee blows the final whistle!")
 		logger.info("Final score: %s", self.score)
 
