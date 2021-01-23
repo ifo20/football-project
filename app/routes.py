@@ -1,8 +1,10 @@
 from flask import render_template, flash, redirect, request
 from app import app
-from fixtures import get_fixture_list, get_teams
+from fixtures import get_fixtures
+from team import get_teams
 from app.forms import LoginForm
 from pdb import set_trace
+import json
 
 
 @app.route('/')
@@ -20,13 +22,15 @@ def index():
         }
     ]
 
-    matchdays = get_fixture_list()
+    teams = get_teams()
+    matchdays = get_fixtures(teams)
+
 
     return render_template(
         'index.html',
         title='Home', 
         user=user, 
-         teams=[(slug,team["name"]) for slug,team in get_teams().items()],
+        teams=[(slug,team.name) for slug,team in get_teams().items()],
         matchdays = matchdays,
     )
 
@@ -37,8 +41,30 @@ def teams():
     return render_template(
         'teams.html',
         title='Teams', 
-        teams=[(slug,team["name"]) for slug,team in get_teams().items()],
+        teams=[(slug,team.name) for slug,team in get_teams().items()],
     )
+
+@app.route('/match_maker', methods=['GET'])
+def match_maker():
+    return render_template(
+        'match.html',
+        title='Match', 
+        teams=[(slug,team.name) for slug,team in get_teams().items()],
+    )
+
+@app.route('/season_maker', methods=['GET'])
+def season_maker():
+    return render_template(
+        'season.html',
+        title='Season Of Simulation', 
+        teams=[(slug,team.name) for slug,team in get_teams().items()],
+    )
+
+@app.route('/season_maker', methods=['POST'])
+def run_simulation():
+   return json.dumps({
+       "table": []
+   })
 
 @app.route('/team/<team_slug>', methods=['GET', 'POST'])
 def team(team_slug):

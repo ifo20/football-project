@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h3 style='color: rgb(0, 0, 0);font-size: 30px;'>Season Simulator</h3>
+<div class="message_holder"></div>
+
+<form action="" method="POST">
+ 
+<button id="requestSimulation" type="button"> Start The Simulation</button>
+
+</form>
+{% endblock content %}
+{% block extra_scripts %}
+<script type="text/javascript">
+  $("#requestSimulation").click((e)=>{
+    e.preventDefault()
+    $.ajax({
+      url: "/season_maker",
+      type: "POST",
+      dataType: "json",
+      success: (resp)=>{
+        alert(resp)
+      }
+    })
+  })
+  </script>
+{% endblock extra_scripts %}
