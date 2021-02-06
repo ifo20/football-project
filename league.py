@@ -21,7 +21,7 @@ class League:
 		teams = {k:defaultdict(int) for k in self.teams}
 		for match in self.matches:
 			home_team_row = teams[match.home_team.slug]
-			away_team_row = teams[match.home_team.slug]
+			away_team_row = teams[match.away_team.slug]
 			home_team_row["games_played"] += 1
 			away_team_row["games_played"] += 1
 			home_team_row["goals_for"] += match.home_score
@@ -29,7 +29,7 @@ class League:
 			home_team_row["goals_against"] += match.away_score
 			away_team_row["goals_against"] += match.home_score
 			home_team_row["goal_difference"] += match.home_score - match.away_score
-			away_team_row["goal_difference"] += match.home_score - match.away_score
+			away_team_row["goal_difference"] += match.away_score - match.home_score
 
 			if match.home_score > match.away_score:
 				home_team_row["won"] += 1
@@ -53,6 +53,9 @@ class League:
 			table.append(team_stats_dict)
 
 		table.sort(key=lambda d: (d["points"], d["goal_difference"]), reverse=True)
+		for position,team in enumerate(table,1):
+			team["position"] = position
+
 		# we could format this nicely here....we will format outside instead
 		return table
 

@@ -5,23 +5,57 @@
 <div class="message_holder"></div>
 
 <form action="" method="POST">
- 
-<button id="requestSimulation" type="button"> Start The Simulation</button>
+
+  <button id="requestSimulation" type="button"> Start The Simulation</button>
+
+  <table class="table table-dark">
+    <thead>
+      <tr>
+        <th>Position</th>
+        <th>Team</th>
+        <th>Played</th>
+        <th>Won</th>
+        <th>Lost</th>
+        <th>Drew</th>
+        <th>Goals Scored</th>
+        <th>Goals Conceded</th>
+        <th>Goals Difference</th>
+        <th>Points</th>
+      </tr>
+    </thead>
+    <tbody id="Leaguetable">
+
+    </tbody>
+  </table>
 
 </form>
 {% endblock content %}
 {% block extra_scripts %}
 <script type="text/javascript">
-  $("#requestSimulation").click((e)=>{
+  $("#requestSimulation").click((e) => {
+    console.log("Yaya toure")
     e.preventDefault()
     $.ajax({
       url: "/season_maker",
       type: "POST",
       dataType: "json",
-      success: (resp)=>{
-        alert(resp)
+      success: (resp) => {
+        resp.table.forEach(element => {
+          tr = $("<tr>")
+          tr.append(`<td>${element.position}</td>`)
+          tr.append(`<td>${element.name}</td>`)
+          tr.append(`<td>${element.games_played}</td>`)
+          tr.append(`<td>${element.won}</td>`)
+          tr.append(`<td>${element.lost}</td>`)
+          tr.append(`<td>${element.draw}</td>`)
+          tr.append(`<td>${element.goals_for}</td>`)
+          tr.append(`<td>${element.goals_against}</td>`)
+          tr.append(`<td>${element.goal_difference}</td>`)
+          tr.append(`<td>${element.points}</td>`)
+          $("#Leaguetable").append(tr)
+        });
       }
     })
   })
-  </script>
+</script>
 {% endblock extra_scripts %}
