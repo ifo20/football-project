@@ -1,21 +1,41 @@
 [
 	{
-		"slug": "carabao-cup",
-		"name": "Carbao Cup"
+		"slug": "premier-league",
+		"name": "Premier League",
+		"type": "league"
 	},
 	{
+		"type": "league",
+		"slug": "championship",
+		"name": "Championship"
+	},
+	{
+		"type": "league",
+		"slug": "league-1",
+		"name": "League 1"
+	},
+	{
+		"type": "league",
+		"slug": "league-2",
+		"name": "League 2"
+	},
+	{
+		"type": "league",
 		"slug": "national-conference",
 		"name": "National Conference"
 	},
+	{
+		"type": "cup",
+		"slug": "carabao-cup",
+		"name": "Carbao Cup"
+	},
     {
+		"type": "cup",
 		"slug": "cash-cup",
 		"name": "Cash Cup"
 	},
-	{
-		"slug": "premier-league",
-		"name": "Premier League"
-	},
     {
+		"type": "cup",
 		"slug": "champions-league",
 		"name": "Uefa Champions League"
 	}

@@ -3,24 +3,21 @@ Represents a single season of a table-based competition
 e.g. Championship 20/21
 """
 
-import events
+from collections import defaultdict
 import logging
 import time
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
-from match import Match
-from team import get_teams
-from fixtures import get_fixtures
-from collections import defaultdict
+from .match import Match
 
 class League:
-	def __init__(self):
-		self.competition = None # TODO
-		self.teams = get_teams()
-		self.fixtures = get_fixtures(self.teams)
+	def __init__(self, competition, teams):
+		self.competition = competition
+		self.teams = teams
 		self.matches = []
 		self.top_scorer = None
+		print(f"Constructed league for {self.competition} with {len(self.teams)} teams: {self.teams}")
 
 	@property
 	def table(self):

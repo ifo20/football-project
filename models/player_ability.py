@@ -1,7 +1,4 @@
-import logging
 import random
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
 
 class PlayerAbility:
 	def __init__(self):
@@ -15,6 +12,9 @@ class PlayerAbility:
 		self.skill = random.randint(70,80)
 		self.tackle = random.randint(70,80)
 		self.shooting = random.randint(70,80)
+
+	def __repr__(self):
+		return f"{self.__dict__}"
 
 	def train(self):
 		self.speed += random.randint(0, 2)

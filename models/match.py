@@ -1,10 +1,9 @@
-import events
 import logging
 import time
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
-from team import get_matchup
+import models.events
 
 class Match:
 	def __init__(self, home_team, away_team):
@@ -66,7 +65,7 @@ if __name__== '__main__':
 	total_home = 0
 	total_away = 0
 	for _ in range(number_of_games):
-		home_team, away_team = get_matchup()
+		home_team, away_team = Team("A"), Team("B")
 		home_team.load_players()
 		away_team.load_players()
 		match = Match(home_team, away_team)

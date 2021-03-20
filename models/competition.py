@@ -1,8 +1,6 @@
 """
 Represents a competition and it's history over many years
 """
-logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger(__name__)
 
 
 class Competition:
@@ -10,3 +8,6 @@ class Competition:
 		self.slug = slug
 		self.name = name
 		self.history = [] # list of winners
+
+	def __repr__(self):
+		return self.name
