@@ -26,4 +26,4 @@ Bob has signed for Sutton on a salary of £100/week!
 
 ## Web
 
-Run `flask run` to start the website (currently broken)
+Run `flask run` to start the website
