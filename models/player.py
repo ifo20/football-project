@@ -35,16 +35,16 @@ class Player:
 			print(f'{self.name} said nah i''m good.')
 			return False
 
-def generate_players(number_of_players):
-	FIRST_NAME_BANK = ['Ashley', 'Justin', 'Roger', 'Iain', 'Bob', 'Kevin', 'Stuart', 'Dave', 'Diogo', 'Sergio', 'Bruno']
-	LAST_NAME_BANK = ['Chai', 'Olliver', 'Smith', 'Jones', 'Cole', 'Keane', 'Wright', 'Yorke', 'Aguero', 'De Bruyne', 'Jota', 'Jimenez', 'Shearer', 'Ferdinand', 'Arteta']
-	return [
-		Player("{} {}".format(random.choice(FIRST_NAME_BANK), random.choice(LAST_NAME_BANK)))
-		for i in range(number_of_players)
-	]
+	@classmethod
+	def generate(cls):
+		FIRST_NAME_BANK = ['Ashley', 'Justin', 'Roger', 'Iain', 'Bob', 'Kevin', 'Stuart', 'Dave', 'Diogo', 'Sergio', 'Bruno']
+		LAST_NAME_BANK = ['Chai', 'Olliver', 'Smith', 'Jones', 'Cole', 'Keane', 'Wright', 'Yorke', 'Aguero', 'De Bruyne', 'Jota', 'Jimenez', 'Shearer', 'Ferdinand', 'Arteta']
+		return cls(f"{random.choice(FIRST_NAME_BANK)} {random.choice(LAST_NAME_BANK)}")
 
 if __name__== '__main__':
 	player = Player('Ashley Chai')
-	player = Player('Ashley Chai')
-	player = Player('Ashley Chai')
-	player = Player('Ashley Chai')
+	print(player)
+	player = Player.generate()
+	print(player)
+	player = Player.generate()
+	print(player)

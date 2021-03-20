@@ -36,7 +36,7 @@ def load_teams() -> Dict[str, Team]:
 					comp_teams.add(row[AWAY_TEAM_IDX])
 			comp_slug = f.split('.')[0]
 			all_teams[comp_slug] = [
-				Team(comp_team)
+				Team.new(comp_team)
 				for comp_team in comp_teams
 			]
 	return all_teams

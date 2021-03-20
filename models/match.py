@@ -1,9 +1,9 @@
 import logging
 import time
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-import models.events
+import models.events as events
 
 class Match:
 	def __init__(self, home_team, away_team):
@@ -32,7 +32,7 @@ class Match:
 
 	def tick(self):
 		logger.debug("Tick: minute %s event %s", self.minute, self.events[-1])
-		self.minute += 0.01
+		self.minute += 2
 		print("Minute:", self.minute)
 		last_event, last_event_minute = self.events[-1]
 		new_event = last_event.generate_next(home_team=self.home_team, away_team=self.away_team)

@@ -5,8 +5,12 @@
 <div class="message_holder"></div>
 
 <form action="" method="POST">
-
-  <button id="requestSimulation" type="button"> Start The Simulation</button>
+  <h5>Choose a league to simulate</h5>
+  <button class="requestSimulation" type="button" name="league" value="premier-league">Premier League</button>
+  <button class="requestSimulation" type="button" name="league" value="championship">Championship</button>
+  <button class="requestSimulation" type="button" name="league" value="league-1">League 1</button>
+  <button class="requestSimulation" type="button" name="league" value="league-2">League 2</button>
+  <button class="requestSimulation" type="button" name="league" value="national-conference">National Conference</button>
 
   <table class="table table-dark">
     <thead>
@@ -43,14 +47,18 @@
 {% endblock content %}
 {% block extra_scripts %}
 <script type="text/javascript">
-  $("#requestSimulation").click((e) => {
-    console.log("Yaya toure")
-    e.preventDefault()
+  $(".requestSimulation").click(function() {
+    const league = $(this).attr('value')
     $.ajax({
       url: "/season_maker",
       type: "POST",
+      data: {
+        league: league
+      },
       dataType: "json",
       success: (resp) => {
+        console.log(resp)
+        $("#Leaguetable").empty()
         resp.table.forEach(element => {
           tr = $("<tr>")
           tr.append(`<td>${element.position}</td>`)

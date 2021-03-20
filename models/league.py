@@ -4,9 +4,10 @@ e.g. Championship 20/21
 """
 
 from collections import defaultdict
+from itertools import combinations
 import logging
 import time
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 from .match import Match
@@ -15,6 +16,13 @@ class League:
 	def __init__(self, competition, teams):
 		self.competition = competition
 		self.teams = teams
+		# combinations gives us every possible pairing of teams
+		self.fixtures = list(combinations(teams, 2))
+		# but it does not give us the reverse fixtures,
+		# for example, (team A, team B) AND (team B, team A)
+		# so we add those now
+		reverse_fixtures = [(b, a) for (a, b) in self.fixtures]
+		self.fixtures.extend(reverse_fixtures)
 		self.matches = []
 		self.top_scorer = None
 		print(f"Constructed league for {self.competition} with {len(self.teams)} teams: {self.teams}")
@@ -22,10 +30,10 @@ class League:
 	@property
 	def table(self):
 		#Need games played, won, draw lost, goals f, goals a, gd, pts
-		teams = {k:defaultdict(int) for k in self.teams}
+		teams = {team.id:defaultdict(int) for team in self.teams}
 		for match in self.matches:
-			home_team_row = teams[match.home_team.slug]
-			away_team_row = teams[match.away_team.slug]
+			home_team_row = teams[match.home_team.id]
+			away_team_row = teams[match.away_team.id]
 			home_team_row["games_played"] += 1
 			away_team_row["games_played"] += 1
 			home_team_row["goals_for"] += match.home_score
@@ -50,10 +58,15 @@ class League:
 				home_team_row["points"] += 1
 
 		table = []
-		for team_slug, team_stats_dict in teams.items():
+		# key teams by team id so we can attach name info a few lines below
+		teams_by_id = {
+			team.id: team
+			for team in self.teams
+		}
+		for team_id, team_stats_dict in teams.items():
 			# include name info in the row
-			team_stats_dict["slug"] = team_slug
-			team_stats_dict["name"] = self.teams[team_slug].name
+			team_stats_dict["id"] = team_id
+			team_stats_dict["name"] = teams_by_id[team_id].name
 			table.append(team_stats_dict)
 
 		table.sort(key=lambda d: (d["points"], d["goal_difference"]), reverse=True)
@@ -70,19 +83,14 @@ class League:
 		for match in self.matches:
 			scorers_in_match = match.scorers
 			players_that_scored.extend(scorers_in_match)
-	
+
 	def play_matches(self):
-		for matchday in self.fixtures:
-			# each matchday is a list of "fixture"
-			for fixture in matchday:
-				# each "fixture" is just a tuple of team "slugs" (not the actual Team class instances)
-				home_team_slug, away_team_slug = fixture
-				# we want the actual team class
-				home_team = self.teams[home_team_slug]
-				away_team = self.teams[away_team_slug]
-				match = Match(home_team, away_team)
-				match.start()
-				self.matches.append(match)
+		for match in self.fixtures:
+			# each "match" is just a tuple of Team instances
+			home_team, away_team = match
+			match = Match(home_team, away_team)
+			match.start()
+			self.matches.append(match)
 
 if __name__== '__main__':
 	league = League()
