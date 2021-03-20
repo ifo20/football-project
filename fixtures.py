@@ -14,6 +14,8 @@ def generate_all_fixtures_for_season(teams):
 	return fixtures
 
 def teams_can_play(matchday, home, away):
+	if len(matchday) < 10:
+		return True
 	already_playing = set()
 	for scheduled_fixture in matchday:
 		existing_home, existing_away = scheduled_fixture
@@ -33,6 +35,8 @@ def allocate_fixtures_to_matchdays(fixtures, number_of_matchdays):
 				matchday.append(fixture)
 				# print("Scheduled {} vs {} for matchday {}".format(home_team, away_team, i))
 				break
+		print("allocated fixtures")
+
 	print("Allocated fixtures, opening matchday fixtures below:")
 	for f in matchdays[0]:
 		print("{} vs {}".format(f[0], f[1]))
@@ -41,4 +45,6 @@ def allocate_fixtures_to_matchdays(fixtures, number_of_matchdays):
 def get_fixtures(teams):
 	fixtures = generate_all_fixtures_for_season(list(teams.keys()))
 	return allocate_fixtures_to_matchdays(fixtures, (len(teams) - 1)*2)
+
+	#rewrite get fixtures
 

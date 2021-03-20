@@ -60,17 +60,22 @@ def season_maker():
 		teams=[(slug,team.name) for slug,team in get_teams().items()],
 	)
 
+league = None
+
 @app.route('/season_maker', methods=['POST'])
 def run_simulation():
-	league = League()
-	league.play_matches()
-	print("Finished simulating league, table below:")
-	
-	for position, table_row in enumerate(league.table, start=1):
-		print(position, table_row["name"], "Played:", table_row["games_played"], "Points:", table_row["points"])
-	
+	global league
+	if league is None:
+		league = League()
+		league.play_matches()
+		print("Finished simulating league, table below:")
+		
+		for position, table_row in enumerate(league.table, start=1):
+			print(position, table_row["name"], "Played:", table_row["games_played"], "Points:", table_row["points"])
+		
 	return json.dumps({
-		"table": league.table
+		"table": league.table,
+		"top_scorer": league.top_scorer,
 	})
 
 @app.route('/team/<team_slug>', methods=['GET', 'POST'])

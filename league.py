@@ -14,6 +14,7 @@ class League:
 		self.teams = get_teams()
 		self.fixtures = get_fixtures(self.teams)
 		self.matches = []
+		self.top_scorer = None
 
 	@property
 	def table(self):
@@ -56,9 +57,17 @@ class League:
 		for position,team in enumerate(table,1):
 			team["position"] = position
 
+
 		# we could format this nicely here....we will format outside instead
 		return table
 
+	@property
+	def scorers(self):
+		players_that_scored = []
+		for match in self.matches:
+			scorers_in_match = match.scorers
+			players_that_scored.extend(scorers_in_match)
+	
 	def play_matches(self):
 		for matchday in self.fixtures:
 			# each matchday is a list of "fixture"
@@ -75,6 +84,7 @@ class League:
 if __name__== '__main__':
 	league = League()
 	league.play_matches()
-	print("Finished simulating league, table below:")
-	for position, table_row in enumerate(league.table, start=1):
-		print(position, table_row["name"], "Played:", table_row["games_played"], "Points:", table_row["points"])
+	print(league.scorers)
+	# print("Finished simulating league, table below:")
+	# for position, table_row in enumerate(league.table, start=1):
+	# 	print(position, table_row["name"], "Played:", table_row["games_played"], "Points:", table_row["points"])

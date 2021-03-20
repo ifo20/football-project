@@ -39,6 +39,10 @@ class Event:
 	def __init__(self, **kwargs):
 		for k in self.PARAMS:
 			assert k in kwargs, "{} was not given param {}".format(self.KEY, k)
+			if not hasattr(kwargs[k], 'id'):
+				print("Param {} did not have id attribute: {}".format(k, kwargs[k]))
+				if k == "player":
+					raise RuntimeError
 		self.params = dict(**kwargs)
 
 	def __str__(self):

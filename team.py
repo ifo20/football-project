@@ -1,16 +1,22 @@
 import logging
 import random
+import time
 import json
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-from player import generate_players
+from player import Player, generate_players
 
 class Team:
 	def __init__(self, slug, name, players = None):
 		self.slug = slug
 		self.name = name
-		self.players = players or []
+		self.players = [
+			Player(player)
+			if isinstance(player,str)
+			else player
+			for player in players
+		]
 
 
 	def __str__(self):
@@ -20,6 +26,8 @@ class Team:
 		self.players = generate_players(11)
 
 	def get_random_player(self):
+		for player in self.players:
+			assert isinstance(player, Player)
 		return random.choice(self.players)
 
 def get_matchup():
@@ -53,4 +61,9 @@ def get_teams():
 	return teams
 
 if __name__== '__main__':
-	team = Team('wolves', 'Wolves')
+	#team = Team('wolves', 'Wolves')
+	x=[]
+	for i in range(10000000):
+		x.append(i)
+	print(x)
+	time.sleep(1000)

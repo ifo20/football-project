@@ -14,6 +14,7 @@ class Match:
 		self.away_score = 0
 		self.minute = 0
 		self.events = [] # (event, minute)
+		self.scorers = []
 		
 
 	@property
@@ -32,12 +33,13 @@ class Match:
 
 	def tick(self):
 		logger.debug("Tick: minute %s event %s", self.minute, self.events[-1])
-		self.minute += 1
+		self.minute += 0.01
 		print("Minute:", self.minute)
 		last_event, last_event_minute = self.events[-1]
 		new_event = last_event.generate_next(home_team=self.home_team, away_team=self.away_team)
 		if "goal_scored" in new_event.UPDATES:
 			logger.debug("goal scored, params=%s", new_event.params)
+			self.scorers.append(new_event.params["player"].id)
 			if new_event.params["team"] == self.home_team:
 				self.home_score += 1
 			if new_event.params["team"] == self.away_team:
@@ -55,6 +57,7 @@ class Match:
 		for scorer in scorers:
 			print(scorer)
 
+	
 if __name__== '__main__':
 	number_of_games = 5
 	# game_speed: 0 is fastest, 0.5-1.0 is relatively normal, 5 is really slow
