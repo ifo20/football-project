@@ -1,0 +1,22 @@
+[
+	{
+		"slug": "carabao-cup",
+		"name": "Carbao Cup"
+	},
+	{
+		"slug": "national-conference",
+		"name": "National Conference"
+	},
+    {
+		"slug": "cash-cup",
+		"name": "Cash Cup"
+	},
+	{
+		"slug": "premier-league",
+		"name": "Premier League"
+	},
+    {
+		"slug": "champions-league",
+		"name": "Uefa Champions League"
+	}
+]

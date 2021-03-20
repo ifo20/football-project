@@ -1,3 +1,8 @@
+"""
+Represents a single season of a table-based competition
+e.g. Championship 20/21
+"""
+
 import events
 import logging
 import time
@@ -11,6 +16,7 @@ from collections import defaultdict
 
 class League:
 	def __init__(self):
+		self.competition = None # TODO
 		self.teams = get_teams()
 		self.fixtures = get_fixtures(self.teams)
 		self.matches = []
