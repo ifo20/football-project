@@ -24,6 +24,21 @@ class Player:
 	def train(self):
 		self.ability.train()
 
+    def get_injury_duration(self) -> str:
+        injury_duration = ["1 game", "2 games", "3 games", "7 games", "1 month", "The rest of the season"]
+        player_injury = random.choice(injury_duration)
+        print("The player is injured for", player_injury)
+		return player_injury
+
+    def player_decision(self, probability: float) -> bool:
+        player_said_yes = random.random() < probability
+        if player_said_yes:
+            print(f'{self.name} said ok.')
+			return True
+        else:
+            print(f'{self.name} said nah i''m good.')
+			return False
+
 def generate_players(number_of_players):
 	FIRST_NAME_BANK = ['Ashley', 'Justin', 'Roger', 'Iain', 'Bob', 'Kevin', 'Stuart', 'Dave', 'Diogo', 'Sergio', 'Bruno']
 	LAST_NAME_BANK = ['Chai', 'Olliver', 'Smith', 'Jones', 'Cole', 'Keane', 'Wright', 'Yorke', 'Aguero', 'De Bruyne', 'Jota', 'Jimenez', 'Shearer', 'Ferdinand', 'Arteta']
