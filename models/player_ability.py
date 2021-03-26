@@ -14,9 +14,18 @@ class PlayerAbility:
 		self.shooting = random.randint(70,80)
 
 	def __repr__(self):
-		return f"{self.__dict__}"
+		"""Formatted list of abilities"""
+		lines = [
+			f"{'Attribute':^20}{'Skill':^3}",
+		]
+		for attribute, value in self.__dict__.items():
+			lines.append(f"{attribute.title():20} {value:>3}")
+		return "\n".join(lines)
 
 	def train(self):
 		self.speed += random.randint(0, 2)
 		self.strength += random.randint(0, 2)
 		self.vision += random.randint(0, 2)
+
+if __name__ == "__main__":
+	print(PlayerAbility())
