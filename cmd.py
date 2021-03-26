@@ -48,9 +48,16 @@ if __name__ == "__main__":
 		except Exception as e:
 			print("That wasn't a valid date. Please try again\n")
 	user = User(first_name, last_name, dob)
+	# 3a. TODO give option for user to provide positions that their player can play
+	available_positions = {'GK', 'CB', 'LB', 'RB', 'CM', 'LM', 'RM', 'ST'}
+	while True:
+		position = input(f"What position do you play? Please enter one of the following:\n{available_positions}\n").strip().upper()
+		if position in available_positions:
+			break
+		print(f"That wasn't a valid position: Please enter one of {available_positions}")
+	user.position = position
 	print(f"{user.name} has burst onto the footballing scene at just {user.age} years old!")
 	print(f"Here are {user.name}'s skills:\n{user.ability}")
-	# 3a. TODO give option for user to provide positions that their player can play
 	# 3b. TODO give option for user to provide names of friends who will also be included in their team
 	# 4. assign user player to a team
 	user_team = random.choice(leagues['national-conference'].teams)

@@ -16,6 +16,7 @@ class Player:
 		self.name: str = f"{first_name} {last_name}"
 		assert dob is None or isinstance(dob, datetime.date)
 		self.dob = dob if dob is not None else datetime.date(random.randint(1990, 2015), random.randint(1, 12), random.randint(1, 28))
+		self.position = None # TODO
 		self.ability: PlayerAbility = PlayerAbility()
 		self.team = None # updated in team.register_player()
 
