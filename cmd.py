@@ -3,27 +3,14 @@ import random
 from typing import Dict, List
 
 from models.competition import Competition
+from models.engine import Engine
 from models.league import League
 from models.team import Team
 from models.user import User
-from data.loaders import load_competitions, load_teams
 
 if __name__ == "__main__":
 	print("Welcome to my game! Loading...")
-	# 1. load all of the data
-	competitions: Dict[str, Competition] = load_competitions()
-	teams: Dict[str, Team] = load_teams()
-	leagues: Dict[str, League] = {}
-	for comp_slug, teams_in_competition in teams.items():
-		competition = competitions[comp_slug]
-		league = League(competition, teams_in_competition)
-		leagues[comp_slug] = league
-	# note: each league is loaded with appropriate Teams
-	# but each team is empty of players at the moment
-	# the idea is to only load them when we need them
-
-
-	# 2. Get personalised info for the user's character
+	# 1. Get personalised info for the user's character
 	first_name = input("Enter your first name:\n").title()
 	last_name = input("Enter your last name:\n").title()
 	while True:
@@ -47,20 +34,24 @@ if __name__ == "__main__":
 			break
 		except Exception as e:
 			print("That wasn't a valid date. Please try again\n")
-	user = User(first_name, last_name, dob)
-	# 3a. TODO give option for user to provide positions that their player can play
+
+	# 3a. Give option for user to provide position that their player plays in
 	available_positions = {'GK', 'CB', 'LB', 'RB', 'CM', 'LM', 'RM', 'ST'}
 	while True:
 		position = input(f"What position do you play? Please enter one of the following:\n{available_positions}\n").strip().upper()
 		if position in available_positions:
 			break
 		print(f"That wasn't a valid position: Please enter one of {available_positions}")
+	user = User(first_name, last_name, dob)
 	user.position = position
-	print(f"{user.name} has burst onto the footballing scene at just {user.age} years old!")
-	print(f"Here are {user.name}'s skills:\n{user.ability}")
+
 	# 3b. TODO give option for user to provide names of friends who will also be included in their team
-	# 4. assign user player to a team
-	user_team = random.choice(leagues['national-conference'].teams)
-	user_team.register_player(user)
-	print(f"{user.name} has signed for {user_team.name} on a salary of £{user.salary}/week!")
-	# 6. TODO What next? Do they make some training choices or go straight into their first match (are they on the bench?)?
+
+	# 4. create game engine, load teams, leagues, assign user player to a lowly team
+	engine = Engine() # this will hold all our data together
+	engine.setup(user)
+
+	# 6. TODO What next?
+	# Do they make some training choices or go straight into their first match (are they on the bench?)?
+	# How does time flow in the game? Week-by-week? Day-by-day?
+	engine.run()
