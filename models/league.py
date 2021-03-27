@@ -16,6 +16,8 @@ class League:
 	def __init__(self, competition, teams):
 		self.competition = competition
 		self.teams = teams
+		for team in teams:
+			team.league = self
 		# combinations gives us every possible pairing of teams
 		self.fixtures = list(combinations(teams, 2))
 		# but it does not give us the reverse fixtures,

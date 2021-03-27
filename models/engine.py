@@ -60,15 +60,19 @@ class Engine:
 		print(self.game_time)
 		while True:
 			# this menu of options should vary depending on whether we are in a matchday or not
-			choice = input("What would you like to do?\n[c] Continue\n[x] Some submenu\n[q] Quit\n").strip().lower()
+			choice = input("What would you like to do?\n[c] Go to the next match\n[x] Some submenu\n[q] Quit\n").strip().lower()
 			if choice == 'c':
-				return
+				fixture = self.user.team.get_next_fixture()
+				self.play_match(fixture)
 			if choice == 'q':
 				self.active = False
 				return
 			if choice == 'x':
 				print("We haven't defined this yet!")
 				return
+	
+	def play_match(self, fixture):
+		pass
 
 if __name__ == "__main__":
 	engine = Engine()

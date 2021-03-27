@@ -18,7 +18,9 @@ class Team:
 		self.id: int = next_team_id
 		next_team_id += 1
 		self.name = name
+		self.league = None
 		self.squad: Set[Player] = set()
+		
 
 	@classmethod
 	def new(cls, name):
@@ -42,3 +44,10 @@ class Team:
 			self.register_player(player)
 			return player
 		return random.choice(tuple(self.squad))
+
+	def get_next_fixture(self):
+		for fixture in self.league.fixtures:
+			home_team = fixture[0]
+			away_team = fixture[1]
+			if home_team == self or away_team == self:
+				return fixture
