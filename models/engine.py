@@ -10,6 +10,7 @@ from .competition import Competition
 from .league import League
 from .team import Team
 from .user import User
+from .match import Match
 
 class Engine:
 	GAME_START_DATE = datetime.datetime(2021, 8, 1, 9) # 9am August 1st
@@ -72,7 +73,8 @@ class Engine:
 				return
 	
 	def play_match(self, fixture):
-		pass
+		match = Match(fixture[0], fixture[1])
+		match.start()
 
 if __name__ == "__main__":
 	engine = Engine()
