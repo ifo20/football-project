@@ -32,7 +32,7 @@ class Match:
 
 	def tick(self):
 		logger.debug("Tick: minute %s event %s", self.minute, self.events[-1])
-		self.minute += 2
+		self.minute += 1
 		print("Minute:", self.minute)
 		last_event, last_event_minute = self.events[-1]
 		new_event = last_event.generate_next(home_team=self.home_team, away_team=self.away_team)
